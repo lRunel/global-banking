@@ -1,3 +1,6 @@
+from services.account_manager import AccountManager
+from services.transation_manger import TransactionManager
+from repositories.account_repositary import AccountRepository
 class AccountUI:
     def start(self):
         while True:
@@ -26,20 +29,89 @@ class AccountUI:
                 break
             else:
                 print('Invalid choice. Please try again')
-        def open_account(self):
-            account_type = input('Enter account type (savings/current): ').strip().lower()
-            name = input('Enter your name: ')
-            amount = float(input('Enter initial deposit amount: '))
-            pin_number = input('Enter your pin number: ')
-            privilege = input('Enter account privilege (PREMIUM/GOLD/SILVER): ').strip().upper()
-            if account_type=='savings':
+    def open_account(self):
+        account_type = input('Enter account type (savings/current): ').strip().lower()
+        name = input('Enter your name: ')
+        amount = float(input('Enter initial deposit amount: '))
+        pin_number = input('Enter your pin number: ')
+        privilege = input('Enter account privilege (PREMIUM/GOLD/SILVER): ').strip().upper()
+        if account_type == "savings":
+            date_of_birth = input("Enter the date of birth(YYYY-MM-DD) : ")
+            gender = input("Enter gender (M/F) : ")
+            account = AccountManager().open_account(
+            account_type,
+            name=name,
+            balance=amount,
+            date_of_birth=date_of_birth,
+            gender=gender,
+            pin_number=pin_number,
+            privilege=privilege,
+        )
 
+        elif account_type == "current":
+            registration_number = input("Enter your registrtion number : ")
+            website_url = input("Enter your website URL")
+            account = AccountManager().open_account(
+                account_type,
+                name=name,
+                balance=amount,
+                registration_number=registration_number,
+                website_url=website_url,
+                pin_number=pin_number,
+                privilege=privilege,
+            )
+        
+        else:
+            print("Invalid account type. Please try again")
+            return
+        print(account_type.capitalize(),"Account opened successfully. Account Number : ",account.account_number)
 
         def close_account(self):
-            pass
+            account_number=int(input("Enter the Account number : "))
+            account=next((acc for acc in AccountRepository.accounts if acc.account_number == account_number),None)
+
+            if account:
+                try:
+                    AccountManager().close_account(account)
+                    print("Account closed successfully")
+                except Exception as e:
+                    print("Error : ",e)
+            
+            else:
+                print("Account Not Found. Please try again ")
+            
+
+
 
         def withdraw_funds(self):
-            pass
-
+            account_number=int(input("Enter the Account number : "))
+            amount=float(input("Enter amount to Withdraw : "))
+            pin_number=input("Enter the pin number : ")
+            account=next((acc for acc in AccountRepository.accounts if acc.account_number == account_number),None)
+            
+            if account:
+                try:
+                    AccountManager().close_account(account)
+                    print("Account closed successfully")
+                except Exception as e:
+                    print("Error : ",e)
+            
+            else:
+                print("not enough fund. Please try again ")
         def deposit_funds(self):
+            account_number=int(input("Enter the Account number : "))
+            amount=float(input("Enter amount to Withdraw : "))
+            account=next((acc for acc in AccountRepository.accounts if acc.account_number == account_number),None)
+            
+            if account:
+                try:
+                    AccountManager().deposit(account,amount)
+                    print("amount deposited successfully")
+                except Exception as e:
+                    print("Error : ",e)
+            
+            else:
+                print("Account Not Found. Please try again ")
+
+        def transfer_funds(self):
             pass
