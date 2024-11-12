@@ -4,7 +4,10 @@ from repositories.account_repositary import AccountRepository
 from exception.exceptions import AccountNotActiveExeption
 from exception.exceptions import InvlidPinException
 from exception.exceptions import InsufficientFundsException
+from exception.exceptions import TransferLimitExceededException
 from services.transation_manger import TransactionManagers
+from services.account_privileges_manager import AccountPrivilegesManager
+
 
 class AccountManager:
     def open_accoint(self,account_type,**kwargs):
@@ -48,5 +51,5 @@ class AccountManager:
 
      from_account.balance -= amount
      to_account.balance += amount
-     TransactionManager.log_transaction(from_account.account_number, amount, 'transfer', to_account.account_number)
+     TransactionManagers.log_transaction(from_account.account_number, amount, 'transfer', to_account.account_number)
 

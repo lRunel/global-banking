@@ -32,6 +32,8 @@ class AccountUI:
             amount = float(input('Enter initial deposit amount: '))
             pin_number = input('Enter your pin number: ')
             privilege = input('Enter account privilege (PREMIUM/GOLD/SILVER): ').strip().upper()
+            if account_type=='savings':
+
 
         def close_account(self):
             pass
