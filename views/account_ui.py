@@ -1,5 +1,5 @@
 from services.account_manager import AccountManager
-from services.transation_manger import TransactionManager
+from services.transation_manger import TransactionManagers
 from repositories.account_repositary import AccountRepository
 class AccountUI:
     def start(self):
@@ -12,7 +12,7 @@ class AccountUI:
             print('4. Deposit Funds')
             print('5. Transfer Funds')
             print('9. Exit')
-            option = int(input('\nEnter your option: '))
+            #option = int(input('\nEnter your option: '))
             choice = int(input('Enter your choice: '))
 
             if choice == 1:
@@ -46,7 +46,7 @@ class AccountUI:
             gender=gender,
             pin_number=pin_number,
             privilege=privilege,
-        )
+            )
 
         elif account_type == "current":
             registration_number = input("Enter your registrtion number : ")
@@ -66,52 +66,66 @@ class AccountUI:
             return
         print(account_type.capitalize(),"Account opened successfully. Account Number : ",account.account_number)
 
-        def close_account(self):
-            account_number=int(input("Enter the Account number : "))
-            account=next((acc for acc in AccountRepository.accounts if acc.account_number == account_number),None)
+    def close_account(self):
+        account_number=int(input("Enter the Account number : "))
+        account=next((acc for acc in AccountRepository.account if acc.account_number == account_number),None)
 
-            if account:
-                try:
-                    AccountManager().close_account(account)
-                    print("Account closed successfully")
-                except Exception as e:
-                    print("Error : ",e)
-            
-            else:
-                print("Account Not Found. Please try again ")
-            
+        if account:
+            try:
+                AccountManager().close_account(account)
+                print("Account closed successfully")
+            except Exception as e:
+                print("Error : ",e)
+        
+        else:
+            print("Account Not Found. Please try again ")
+        
 
 
 
-        def withdraw_funds(self):
-            account_number=int(input("Enter the Account number : "))
-            amount=float(input("Enter amount to Withdraw : "))
-            pin_number=input("Enter the pin number : ")
-            account=next((acc for acc in AccountRepository.accounts if acc.account_number == account_number),None)
-            
-            if account:
-                try:
-                    AccountManager().close_account(account)
-                    print("Account closed successfully")
-                except Exception as e:
-                    print("Error : ",e)
-            
-            else:
-                print("not enough fund. Please try again ")
-        def deposit_funds(self):
-            account_number=int(input("Enter the Account number : "))
-            amount=float(input("Enter amount to Withdraw : "))
-            account=next((acc for acc in AccountRepository.accounts if acc.account_number == account_number),None)
-            
-            if account:
-                try:
-                    AccountManager().deposit(account,amount)
-                    print("amount deposited successfully")
-                except Exception as e:
-                    print("Error : ",e)
-            
-            else:
-                print("Account Not Found. Please try again ")
+    def withdraw_funds(self):
+        account_number=int(input("Enter the Account number : "))
+        amount=float(input("Enter amount to Withdraw : "))
+        pin_number=input("Enter the pin number : ")
+        account=next((acc for acc in AccountRepository.account if acc.account_number == account_number),None)
+        
+        if account:
+            try:
+                AccountManager().withdraw(account)
+                print("Account withdrawn successfully")
+            except Exception as e:
+                print("Error : ",e)
+        
+        else:
+            print("not enough fund. Please try again ")
+    def deposit_funds(self):
+        account_number=int(input("Enter the Account number : "))
+        amount=float(input("Enter amount to deposited : "))
+        account=next((acc for acc in AccountRepository.account if acc.account_number == account_number),None)
+        
+        if account:
+            try:
+                AccountManager().deposit(account,amount)
+                print("amount deposited successfully")
+            except Exception as e:
+                print("Error : ",e)
+        
+        else:
+            print("Account Not Found. Please try again ")
 
-        def transfer_funds(self):
-            pass
+    def transfer_funds(self):
+        sender_account_number=int(input("enter sender "))
+        reciever_account_number=int(input("enter reciever "))
+        pin_number=int(input("enter your pin number"))
+        amount=float(input("Enter amount to Withdraw : "))
+        sender_account=next((acc for acc in AccountRepository.account if acc.account_number == sender_account_number),None)
+        reciever_account=next((acc for acc in AccountRepository.account if acc.account_number == reciever_account_number),None)
+        if reciever_account and  sender_account:
+            try:
+                AccountManager().transfer(sender_account,reciever_account,amount,pin_number)
+                print("amount deposited successfully")
+            except Exception as e:
+                print("Error : ",e)
+        
+        else:
+            print("Account Not Found. Please try again ")
